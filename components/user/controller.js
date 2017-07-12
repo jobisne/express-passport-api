@@ -1,11 +1,16 @@
 const User = require('./model')();
+const emailHelper = require('../../helpers/email-helper');
+
 
 module.exports = {
   create: function (req, res) {
     User.create(req.body).then(user => {
+      emailHelper.verifyEmail(user);
       return res.status(201).json(user);
     }).catch(err => {
       console.log(err);
+      // if (err.code === 11000)
+      //   return res.status(400).json({ meassage: 'Validation error has occured', reason: 'Email Exist'})
       return res.status(400).json(err);
     });
   },
