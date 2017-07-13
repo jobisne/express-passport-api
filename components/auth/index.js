@@ -26,7 +26,12 @@ const ctrl = require('./controller');
 
 const router = express.Router();
 
-router.route('/')
+router.route('/login')
   .post(ctrl.login);
+router.route('/forgot-password')
+  .post(ctrl.forgot);
+router.route('/reset-password/:token')
+  .get(ctrl.reset);
+
 
 module.exports = router;

@@ -12,6 +12,7 @@ router.route('/')
 router.route('/:id')
   .all(isAuthenticated)
   .get(ctrl.read)
-  .put(ctrl.update);
+  .put(ctrl.update)
+  .delete(ctrl.delete);
 
 module.exports = router;

@@ -10,12 +10,13 @@ const nodemailer = require('nodemailer')
       });
 
 module.exports = {
-	verifyEmail: function (user) {
+	verifyEmail: function (user, subject, text) {
     var message = {
         from: 'no-reply@sauban.co',
         to: user.email,
-        subject: 'Invitation to Property aid Platform',
-        html: '<p>We are kindly grateful to welcome you to Property aid Platform <br /> which help you to manage your Property(House) </p>',
+        subject: subject,
+        html: text,
+       
       };
 
           transporter.sendMail(message, function (err, message) {
