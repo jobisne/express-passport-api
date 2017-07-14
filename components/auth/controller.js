@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
 const emailHelper = require('../../helpers/email-helper');
-const SECRET = require('../../config/config').settings.JWT_SECRET;
 
 module.exports  = {
 	login: function(req, res, next) {
@@ -25,6 +24,7 @@ module.exports  = {
 		})(req, res, next);
 	},
 	forgot: function (req, res, next) {
+const SECRET = req.app.get('config').JWT_SECRET;
 	
 			User.findOne({ email: req.body.email}).then( user => {
 				if (!user) {
@@ -37,7 +37,7 @@ module.exports  = {
 				var sub = 'Forgot passsword';
 				var text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
          				 	'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          					'http://' + req.headers.host + '/auth/reset-password/' + token + '\n\n' +
+          					'http://' + req.headers.host + '/auth/reset-password/' + token + '<br/ ><br/>' +
          					'If you did not request this, please ignore this email and your password will remain unchanged.\n';
           		emailHelper.verifyEmail(user,sub, text ); 
 				return res.status(200).json({msg: "ok"});
@@ -47,6 +47,8 @@ module.exports  = {
 			});
 	},
 	reset: function (req, res) {
+const SECRET = req.app.get('config').JWT_SECRET;
+
 		const cipher = crypto.createDecipher('aes192', SECRET);
 			let email = cipher.update(req.params.token, 'hex', 'utf8');
 				email += cipher.final('utf8'); 
